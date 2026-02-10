@@ -1,0 +1,13 @@
+/build
+/debug/
+/outputs/
+*.apk
+*.aab
+/test-results/
+/androidTest-results/
+/lint/
+/lint-intermediates/
+navigation/
+.externalNativeBuild/
+.cxx
+/captures/
