@@ -11,5 +11,10 @@
     <string name="features_list">• Precision Stopwatch Timer\n• Motion &amp; Activity Tracking\n• GPS Location Services\n• Real-time Sensor Data</string>
     <string name="start_timer">Start Timer</string>
     
-    <!-- Removed placeholder string -->
+    <!-- Timer Fragment Strings -->
+    <string name="timer_label">Timer</string>
+    <string name="steps_label">Steps</string>
+    <string name="distance_label">Distance</string>
+    <string name="speed_label">Speed</string>
+    <string name="route_map_label">Route Map</string>
 </resources>

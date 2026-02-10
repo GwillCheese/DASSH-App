@@ -6,35 +6,149 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
+    android:padding="16dp"
     tools:context=".TimerFragment">
 
-<!--     the timer itself-->
+    <!-- Timer Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/timer_label"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
     <Chronometer
         android:id="@+id/stopwatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="56sp" />
+        android:textSize="48sp"
+        android:layout_marginBottom="16dp" />
 
-<!--    start button-->
-    <Button
-        android:id="@+id/start_button"
+    <!-- Metrics Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/steps_label"
+                android:textSize="14sp"
+                android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/steps_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/distance_label"
+                android:textSize="14sp"
+                android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/distance_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0 km"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/speed_label"
+                android:textSize="14sp"
+                android:textColor="#666666" />
+
+            <TextView
+                android:id="@+id/speed_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0 km/h"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Map Section -->
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start" />
+        android:text="@string/route_map_label"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
-<!--    pause button-->
-    <Button
-        android:id="@+id/pause_button"
+    <org.osmdroid.views.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Control Buttons -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pause" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center">
 
-<!--    reset button-->
-    <Button
-        android:id="@+id/reset_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reset" />
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/pause_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pause"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reset" />
+    </LinearLayout>
 
 </LinearLayout>

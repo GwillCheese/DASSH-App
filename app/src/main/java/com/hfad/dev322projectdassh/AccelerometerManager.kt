@@ -14,9 +14,14 @@ class AccelerometerManager(private val context: Context) : SensorEventListener {
     private val sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val accelerometer: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
     private var listener: AccelerometerListener? = null
+    private val stepDetector = StepDetector()
     
     fun setListener(listener: AccelerometerListener) {
         this.listener = listener
+    }
+    
+    fun setStepListener(listener: StepListener) {
+        stepDetector.setListener(listener)
     }
     
     fun startListening() {
@@ -35,11 +40,21 @@ class AccelerometerManager(private val context: Context) : SensorEventListener {
     
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null && event.sensor.type == Sensor.TYPE_LINEAR_ACCELERATION) {
-            listener?.onAccelerometerDataChanged(event.values[0], event.values[1], event.values[2])
+            val (x, y, z) = event.values
+            listener?.onAccelerometerDataChanged(x, y, z)
+            stepDetector.processAccelerometerData(x, y, z)
         }
     }
     
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // No implementation needed for this use case
+    }
+    
+    fun getStepCount(): Int {
+        return stepDetector.getStepCount()
+    }
+    
+    fun resetSteps() {
+        stepDetector.resetSteps()
     }
 }

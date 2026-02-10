@@ -44,6 +44,10 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    
+    // OSMDroid for OpenStreetMap tiles
+    implementation("org.osmdroid:osmdroid-android:6.1.14")
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
