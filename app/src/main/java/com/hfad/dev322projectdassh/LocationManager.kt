@@ -20,6 +20,9 @@ class AppLocationManager(private val context: Context) : LocationListener {
     private var listener: GpsLocationListener? = null
     private val locationPermissionCode = 2
     
+    // GPS accuracy filtering
+    private val maxAcceptableAccuracy = 20f // 20 meters maximum accuracy
+    
     fun setListener(listener: GpsLocationListener) {
         this.listener = listener
     }
@@ -43,7 +46,10 @@ class AppLocationManager(private val context: Context) : LocationListener {
     }
     
     override fun onLocationChanged(location: Location) {
-        listener?.onLocationReceived(location)
+        // Filter out inaccurate GPS readings
+        if (location.accuracy <= maxAcceptableAccuracy) {
+            listener?.onLocationReceived(location)
+        }
     }
     
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

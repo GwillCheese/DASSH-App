@@ -1,4 +1,5 @@
 package com.hfad.dev322projectdassh
+
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -15,6 +16,8 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -42,6 +45,21 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
     private lateinit var speedTextView: TextView
     private lateinit var mapView: MapView
     private lateinit var mapManager: MapManager
+    private lateinit var statusTextView: TextView
+    private lateinit var gpsStatusTextView: TextView
+    
+    // Permission request launcher
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            appLocationManager.startLocationUpdates()
+            gpsStatusTextView.text = "GPS Active"
+            Toast.makeText(requireContext(), "Location permission granted", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +75,8 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
         distanceTextView = view.findViewById(R.id.distance_count)
         speedTextView = view.findViewById(R.id.speed_count)
         mapView = view.findViewById(R.id.map_view)
+        statusTextView = view.findViewById(R.id.status_text)
+        gpsStatusTextView = view.findViewById(R.id.gps_status_text)
         
         //Initialize map
         mapManager = MapManager(requireContext())
@@ -83,9 +103,8 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
         startButton.setOnClickListener {
             startTime = System.currentTimeMillis()
             stopwatchManager.start(stopwatch)
-            if (appLocationManager.isLocationPermissionGranted()) {
-                appLocationManager.startLocationUpdates()
-            }
+            statusTextView.text = "Workout in Progress"
+            requestLocationPermission()
         }
 
         //pause button
@@ -95,6 +114,8 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
             speedCalculator.addTime(elapsedTime)
             stopwatchManager.pause(stopwatch)
             appLocationManager.stopLocationUpdates()
+            statusTextView.text = "Workout Paused"
+            gpsStatusTextView.text = "GPS Paused"
         }
 
         //reset button
@@ -102,6 +123,8 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
         resetButton.setOnClickListener {
             resetAllTracking()
             stopwatchManager.reset(stopwatch)
+            statusTextView.text = "Ready to Start"
+            gpsStatusTextView.text = "GPS Inactive"
         }
         
         return view
@@ -169,18 +192,19 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
         Toast.makeText(requireContext(), "Location Permission Denied", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 2) { // locationPermissionCode from AppLocationManager
-            appLocationManager.handlePermissionResult(grantResults)
-        }
-    }
-
-    private fun getLocation() {
-        if (!appLocationManager.isLocationPermissionGranted()) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 2)
-        } else {
-            appLocationManager.startLocationUpdates()
+    private fun requestLocationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                appLocationManager.startLocationUpdates()
+                gpsStatusTextView.text = "GPS Active"
+                Toast.makeText(requireContext(), "Location permission granted", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
         }
     }
     
@@ -196,6 +220,8 @@ class TimerFragment : Fragment(), AccelerometerListener, GpsLocationListener, St
         stepsTextView.text = "0"
         distanceTextView.text = "0.0 km"
         speedTextView.text = "0.0 km/h"
+        statusTextView.text = "Ready to Start"
+        gpsStatusTextView.text = "GPS Inactive"
     }
 
 

@@ -6,10 +6,17 @@ class DistanceCalculator {
     private var totalDistance = 0.0 // in meters
     private var lastLocation: Location? = null
     
+    // Minimum distance threshold to prevent GPS drift
+    private val minDistanceThreshold = 5.0 // 5 meters minimum
+    
     fun addLocation(location: Location): Double {
         lastLocation?.let { last ->
             val distance = last.distanceTo(location).toDouble()
-            totalDistance += distance
+            
+            // Only add distance if it exceeds minimum threshold
+            if (distance >= minDistanceThreshold) {
+                totalDistance += distance
+            }
         }
         lastLocation = location
         return totalDistance
